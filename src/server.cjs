@@ -1,7 +1,10 @@
-import express from "express";
-import dotenv from "dotenv";
-import connectToDB from "../database/db.js";
-import { Todo } from "../models/todo.model.js";
+const express = require("express");
+const dotenv = require("dotenv");
+const connectToDB = require("../database/db.cjs");
+const { Todo } = require("../models/todo.model.cjs");
+
+const bodyParser = require("body-parser");
+const cors = require("cors");
 //load environment variables first
 dotenv.config();
 //connect to mongodb
@@ -10,6 +13,12 @@ const app = express();
 const port = 4000;
 //enable json parsing
 app.use(express.json());
+
+//use the packages here
+app.use(bodyParser.json()); //to suport json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); //to support url encoded bodies
+app.use(cors()); //allows data sharing front-back
+
 //TODO API
 app.get("/todos", async (req, res) => {
   try {
@@ -34,13 +43,13 @@ app.post("/post-todos", async (req, res) => {
     res.send({
       success: true,
       message: "todo is created successfully",
-      data: "result",
+      data: result,
     });
   } catch (error) {
     res.send({
       success: false,
       message: "failed to create todo",
-      data: "result",
+      error: error.message,
     });
   }
 });
