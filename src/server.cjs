@@ -36,6 +36,7 @@ app.get("/todos", async (req, res) => {
     });
   }
 });
+//post new todos
 app.post("/post-todos", async (req, res) => {
   const todoDetails = req.body;
   try {
@@ -43,7 +44,7 @@ app.post("/post-todos", async (req, res) => {
     res.send({
       success: true,
       message: "todo is created successfully",
-      data: result,
+      text: result.text,
     });
   } catch (error) {
     res.send({
